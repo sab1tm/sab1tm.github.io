@@ -1,1 +1,124 @@
-hello!!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>machine's job</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 1s ease-out, pulse 2s 2s infinite;
+            border: 1px solid #ff0000;
+        }
+
+        #overlay p {
+            color: #0F0;
+            margin: 0;
+            font-size: 2em;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #overlay a {
+            color: #0F0;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div id="overlay">
+        <p><a href="https://t.me/sab1tm" target="_blank">t.me/sab1tm</a></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("matrix-canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrixChars = "7gpanx3yrftzc1q92sm8eohd54bvli0k6";
+        const charsArray = matrixChars.split("");
+
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        const speedFactors = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height / fontSize;
+            speedFactors[i] = Math.random() * 2 + 0.5;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0F0";
+            ctx.font = `${fontSize}px arial`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = charsArray[Math.floor(Math.random() * charsArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                    speedFactors[i] = Math.random() * 2 + 0.5;
+                }
+
+                drops[i] += speedFactors[i];
+            }
+        }
+
+        function showOverlay() {
+            const overlay = document.getElementById("overlay");
+            overlay.style.display = "block";
+        }
+
+        const animationInterval = setInterval(drawMatrix, 50);
+
+        setTimeout(function() {
+            showOverlay();
+        }, 2000);
+    </script>
+</body>
+</html>
+
